@@ -1,0 +1,149 @@
+body {
+	margin:0;
+	font-family: Helvetica, Arial, sans-serif;
+	line-height: 1.4;
+  background-color: #312D27;
+  font-size:100%;
+}
+
+pre { display: inline}
+
+/*Font-size info. All font sizes are based on the 
+  target ÷ context = result formula
+*/
+
+header #logo {
+	position: absolute;
+	margin-left:355px;
+}
+
+#container {
+	position: absolute;
+	top: 10%;
+	left: 50%;
+	margin-left: -260px;
+	width: 400px;
+}
+
+#share {
+  margin-right: 400px;
+}
+
+ul li {
+	list-style: none;
+	float: left;
+	margin:5px;
+}
+
+/* Card specific styling */
+
+.item {
+	width:80px;
+	height:100px;
+	border:solid 2px black;
+	border-radius:6px;
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+}
+
+
+/* End */
+
+.highlight { 
+    box-shadow: 0 0 0 8px yellow;
+}
+
+#info {
+	position:absolute;
+	border: solid black 2px;
+	height: 250px;
+	margin-left:380px;
+	width:160px;
+	margin-top:90px;
+	border-radius:6px;
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+  background-color: #42403C;
+  color: #D8D2C5;
+  text-shadow: 0 -1px black;
+}
+
+#info h2 {
+  font-weight:bold;
+  font-size: 22px;
+  padding-left: 10px;
+}
+
+.error span {
+  display: none;
+}
+
+/* Button styles */
+
+.content {
+  position: absolute;
+  margin: 80px;
+  margin-left: 380px;
+  margin-top: 400px; 
+
+}
+ 
+ 
+.button {
+  width: 110px;
+  text-align: center;
+  background-color: #42403C;
+  border-radius: 5px;
+  padding: 8px 0;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  float: left;
+  text-shadow: 0 -1px black;
+  font-weight: bold;
+  border: solid 1px black;
+}
+
+.button-selected, .button:hover {
+  background-color:#ADA799;
+}
+
+.inner {
+  margin-top: 10px;
+  font-weight: bold;
+  color: #D8D2C5;  
+  text-shadow: 0 -1px black;
+  font-size: 1.2em;
+}
+
+.inner-selected, .inner:hover {
+  color:#312D27;
+  text-shadow: 0 1px #F2F2F2;
+}
+
+/* End button styles */
+
+.time p {
+  font-weight: bold;
+  font-size:1.4em;
+  color: #D8D2C5;
+  text-shadow: 0 -1px black;
+  float:left;
+  padding:15px;
+}
+
+.time-counter {
+  color: #D8D2C5;
+  text-shadow: 0 -1px black;
+  float:left;
+  margin-top: 16px;
+  font-size: 1.4em;
+}
+
+.score-counter {
+  color: #D8D2C5;
+  text-shadow: 0 -1px black;
+  float:left;
+  margin-top: 16px;
+  font-size: 1.4em;
+}
+ 
