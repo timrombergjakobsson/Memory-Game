@@ -14,27 +14,6 @@ window.log = function(){
 (function(b){function c(){}for(var d="assert,count,debug,dir,dirxml,error,exception,group,groupCollapsed,groupEnd,info,log,timeStamp,profile,profileEnd,time,timeEnd,trace,warn".split(","),a;a=d.pop();){b[a]=b[a]||c}})((function(){try
 {console.log();return window.console;}catch(err){return window.console={};}})());
 
-
-// based on http://stackoverflow.com/a/962890/90670
-Array.prototype.shuffle = function() {
-	var tmp, current, top = this.length;
-
-    if(top) while(--top) {
-        current = Math.floor(Math.random() * (top + 1));
-        tmp = this[current];
-        this[current] = this[top];
-        this[top] = tmp;
-    }
-
-    return this;
-};
-
-
-/*var keyDown = new Array();
-	for (var i = 0; i<256; i++) {
-		keyDown[i] = false;
-	}*/
-
 processKeyEvents = function(event) {
 	if (window.event)
 	{
@@ -81,15 +60,39 @@ $(document).keydown(function(event) {
          $prev.addClass("highlight");
       } 
     } else if (key === 13) {
-      cardClicked();
+      flipCard();
     }
  });
 
-function cardClicked () {
-  if($('.flipped').size > 1) {
-    alert('come on')
-    return;
-  }
+function flipCard () {
+  var flipped = 0;
+
+  if($(this).attr('id') == 'flip1' || $(this).attr('id') == 'flip2' || $(this).hasClass('good')){
+          // to do, click again on flipped card
+      }
+      else{
+        $(this).toggleClass('flip');
+          flipped = flipped + 1;
+            if(flipped === 1){
+              $('#flip1').removeAttr('id', 'flip1');
+              $('#flip2').removeAttr('id', 'flip2');
+              $(this).attr('id', 'flip1');
+              }
+            else if(flipped === 2){
+              $(this).attr('id', 'flip2');
+            if($(this).children('.card-back').children('img').attr('alt') === $('#flip1').children('.card-back').children('img').attr('alt')){
+              $(this).addClass('good');
+              $('#flip1').addClass('good');
+              points++;
+            }
+            if(points === 10){
+              $('body').css('opacity', '50%');
+              confirm("you made it baby");
+              document.location.reload();
+            }
+            flipped = 0;
+            }
+      }
 
 $(this).addClass('flipped');
 
@@ -162,36 +165,19 @@ MemoryGame.cards = [
 var cardArray = [cardOne, cardTwo, cardThree, cardFour, cardFive, cardSix, cardSeven, cardEight];
 
 cardArray.map(function(item) {
-  
+ 
 })
-
-/*for(var i = 0; i < cardArray.length; i++) {
-  alert(cardArray[i]);
-}*/
-
-MemoryGame.cardDeck = function() {
-
-  var cards = new Array();
-  cards[0] = card('#e6e03b', '#e6e03b');
-  cards[1] = card('#3be6c4', '#3be6c4');
-  cards[2] = card('#6f3be6', '#6f3be6');
-  cards[3] = card('#4fe63b', '#4fe63b');
-  cards[4] = card('#ff5a00', '#ff5a00');
-  cards[5] = card('#ff00de', '#ff00de');
-  cards[6] = card('#3b8fe6', '#3b8fe6');
-  cards[7] = card('#e63b3b', '#e63b3b');
-
-  var randomNumber = Math.floor(Math.random() * 11)
-
-  return card[randomNumber];
-}
 
 // This solution only affects the arr var and not all arrays
 var arr = [];
 arr.shuffle = function () {
-    for (var i = this.length - 1; i > 0; i--) {
-        var j = Math.floor(Math.random() * (i + 1));
-        var tmp = this[i];
+    'use strict';
+    var i,
+    j,
+    tmp;
+    for (i = this.length - 1; i > 0; i--) {
+        j = Math.floor(Math.random() * (i + 1));
+        tmp = this[i];
         this[i] = this[j];
         this[j] = tmp;
     }
@@ -201,15 +187,24 @@ arr.shuffle = function () {
 // lets start by shuffling the array
 $(function () {
   console.log(MemoryGame.cards.shuffle());
+  var concatinatedArray = MemoryGame.cards.join(concatinatedArray);
+  var arrayColours = concatinatedArray;
+  var i;
+  for(var i = 0; i < arrayColours.length; i++) {
+      var test = $("li.item").css(arrayColours[i]);
+      console.log(test);
+  }
 });
 
-MemoryGame.buildDeck = function () {
-  var test = $(".theDeck").html('');
+MemoryGame.prototype.buildDeck = function (count) {
+  var theDeck = $(".theDeck");
+  console.log(theDeck);
   this.deck = [];
-  for (card in this.cards) {
+  for (card in MemoryGame.cards) {
     if(card < parseFloat(count)) {
-      this.deck.push(this.card[card]);
-      alert(this.deck.push(this.card[card]));
+      console.log(card);
+      this.deck.push(this.cards[card]);
+      console.log(this.deck.push(this.cards[card]));
     } 
   }
 }
@@ -227,9 +222,11 @@ function ReloadPage() {
 };
 
 (function() {
+  'use strict';
   setTimeout("ReloadPage()", 60000000);
+  var myCounter;
   var elem = $('.time-counter');
-	var count = parseInt(elem.text());
+	var count = parseInt(elem.text(), 10);
 	myCounter = setInterval(function () {
     count += 1;
     elem.html(count);
@@ -237,23 +234,21 @@ function ReloadPage() {
 })();
 
 function MemoryGame(score, player, card) {
+  'use strict';
 	this.score = 0;
 	this.player = 0;
   this._name = memoryGame;
   this._version = '0.1';
   //new Player(this);
 	this.card = card;
-  //this.start();
+  this.start;
 
-}
-
-function Player() {
-	this.points = 0;
 }
 
 MemoryGame.prototype.start = function() {
   var _game = this; 
   this.getScore();
+  this.buildDeck();
   this.readConfigFile();
 }
 
@@ -281,107 +276,30 @@ MemoryGame.prototype.setCard = function(card) {
 	this.card = card;
 }
 
-function ScoreKeeper() {
-  this.score = 0;
-  $("#score").html("Score: 0");
-}
-
-ScoreKeeper.prototype.makeSelection = function () {
-
-}
-
 MemoryGame.prototype.readConfigFile = function() {
- 'use strict'
  $.get("http://labs.funspot.tv/worktest_color_memory/colours.conf", function(data) {
       var result = data.responseText;
       $foo = $('<div>' + result + '</div>');
       $.each($foo.find('p'), function(item) {
         var p = $foo.find('p');
         var s = $(p).html();
-        var stringy = "You should probably list all your requirements before wasting my #abcd4f time because my time is really #808080 valuable to me and I don't have enough #123456 free time as it is.";
-        var hexColour = s.match(/#[0-9a-f]{6}/gi).join(", ");
-        alert(hexColour);
-        console.log('hello');
+        var hexColour = s.match(/#[0-9a-f]{6}/gi);
         var i;
-        for ( i = 0, item; item = hexColour[i]; i++) {
-    
+        for(var i = 0; i < hexColour.length; i++) {
+          MemoryGame.cards.push(hexColour[i]);
         }
-        //return hexColour;
       });
     },
     "html", "text");
 }
 
-	//Function to convert hex format to a rgb color
-	function hex2rgb(rgb) {
- 		rgb = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
- 		qreturn + "#" + hex(rgb[1]) + hex(rgb[2]) + hex(rgb[3]);
-	}
-
-  function hasHex(str) {
-    return str.match(/^#[a-f0-9]{6}$/i) !== null;
-}
-
-	function hex(x) {
-  		return isNaN(x) ? "00" : hexDigits[(x - x % 16) / 16] + hexDigits[x % 16];
- 	}
-
-
-MemoryGame.prototype.endGame = function () {
-			// Show fancy notication and reload page
-			if ($(this.options.selector.card, this.element).length === $(this.options.selector.empty).length) {
-				$(this.options.selector.notification_text).text(nrAttempts);
-				$(this.options.selector.notification_area)
-					.show()
-					.animate(
-						{ width:0, height:0, left:"50%", top:"50%", fontSize:0 },
-						this.options.timeout_notification,
-						this.reloadPage
-					);
-			}
-};
-
-
-var cardOne;
-var cardTwo;
-
-// event handler function attached to the flip button
-// checks if the colours are the same and updates the score
-
-
-var score = function() {
-
-	var selectedCount = 0;
-	var selectedArray = [];
-	for (var i = 0; i < cardArray.length; i++)
-	{
-		if (cardArray[i].selected)
-		{
-			selectedCount = selectedCount + 1;
-			selectedArray.push(cardArray[i]);
-		}
-	}
-	if (selectedCount == 2)
-	{
-		selectedArray[0].flip();
-		selectedArray[1].flip();
-		// if the values of the two cards are the same
-		if (selectedArray[0].value == selectedArray[1].value)
-		{
-			selectedArray[0].disableBtn();
-			selectedArray[1].disableBtn();
-			addPoints();
-		}
-		else
-		{
-			// There is an issue here with setTimeout when you try to call a method in your 'class'
-			// The addition of an extra argument solves the problem, but maybe not in IE
-			setTimeout(function(thisObj) { selectedArray[0].unselect(); }, 1000, this)
-			setTimeout(function(thisObj) { selectedArray[1].unselect(); }, 1000, this)
-		}
-	}
-	else
-		alert("Please select two cards!");
+function hexToRgb(hex) {
+    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16)
+    } : null;
 }
 
 function loaded() {
